@@ -4,23 +4,25 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
+using Survey.Persistence;
 using Survey.UI.Areas.Identity;
 using Survey.UI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var services = builder.Services;
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+services.AddDatabaseDeveloperPageExceptionFilter();
+services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
-builder.Services
+services.AddRazorPages();
+services.AddServerSideBlazor();
+services
     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-builder.Services.AddSingleton<WeatherForecastService>();
+services.AddSingleton<WeatherForecastService>();
+services.AddScoped<DataContext>();
 
 var app = builder.Build();
 
