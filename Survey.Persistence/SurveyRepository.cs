@@ -29,7 +29,7 @@ public class SurveyRepository : ISurveyRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Domain.Models.Survey>> GetAllSurveysAsync()
+    public async Task<List<Domain.Models.Survey>> GetAllSurveysAsync()
     {
         return await _context.Surveys.ToListAsync();
     }

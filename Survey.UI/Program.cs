@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Survey.Persistence;
 using Survey.UI.Areas.Identity;
 using Survey.UI.Data;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -20,7 +21,8 @@ services.AddRazorPages();
 services.AddServerSideBlazor();
 services
     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-
+services.AddMudServices();
+services.AddScoped<SurveyRepository>();
 
 var app = builder.Build();
 

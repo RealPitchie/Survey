@@ -1,7 +1,28 @@
 ﻿@page "/surveys"
  
+@using Domain.Models
+@using Microsoft.EntityFrameworkCore
+@using Survey.Persistence
+
+@inject SurveyRepository repo
+
+<div>
+    @if (_items.Count > 0)
+    {
+    }
+</div>
+<MudButton OnClick="() => AddSurvey()" Variant="Variant.Outlined" Color="Color.Default">Добавить опрос</MudButton>
 
 
 @code {
-    
-}
+    List<Domain.Models.Survey> _items = new();
+    protected override async Task OnInitializedAsync()
+    {
+        _items = await repo.GetAllSurveysAsync();
+    }
+
+   async Task AddSurvey()
+   {
+       
+   }
+} 
