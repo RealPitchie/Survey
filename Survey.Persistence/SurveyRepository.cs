@@ -13,26 +13,29 @@ public class SurveyRepository : ISurveyRepository
     }
     public async Task AddSurvey(Domain.Models.Survey survey)
     {
-        throw new NotImplementedException();
+        await _context.AddAsync(survey);
+        await _context.SaveChangesAsync();
     }
 
     public async Task EditSurvey(Domain.Models.Survey survey)
     {
-        throw new NotImplementedException();
+        _context.Update(survey);
+        await _context.SaveChangesAsync();
     }
 
     public async Task RemoveSurvey(Domain.Models.Survey survey)
     {
-        throw new NotImplementedException();
+        _context.Remove(survey);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<Domain.Models.Survey>> GetAllSurveysAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Surveys.ToListAsync();
     }
 
-    public async Task<Domain.Models.Survey> GetByIdAsync(string id)
-    {
-        throw new NotImplementedException();
+    public async Task<Domain.Models.Survey?> GetByIdAsync(string id)
+    { 
+        return await _context.Surveys.FirstOrDefaultAsync(s => s.Id == id);
     }
 }

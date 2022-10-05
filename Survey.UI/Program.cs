@@ -10,19 +10,17 @@ using Survey.UI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+// Add services to the container. 
+services.AddDbContext<DataContext>(options =>
+    options.UseNpgsql("UserID=root;Password=passmein123;Server=localhost;Port=5432;Database=survey;"));
 services.AddDatabaseDeveloperPageExceptionFilter();
 services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<DataContext>();
 services.AddRazorPages();
 services.AddServerSideBlazor();
 services
     .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-services.AddSingleton<WeatherForecastService>();
-services.AddScoped<DataContext>();
+
 
 var app = builder.Build();
 

@@ -6,5 +6,5 @@ public interface ISurveyRepository
     Task EditSurvey(Domain.Models.Survey survey);
     Task RemoveSurvey(Domain.Models.Survey survey);
     Task<IEnumerable<Domain.Models.Survey>> GetAllSurveysAsync();
-    Task<Domain.Models.Survey> GetByIdAsync(string id);
+    Task<Domain.Models.Survey?> GetByIdAsync(string id);
 }
