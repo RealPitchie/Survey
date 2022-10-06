@@ -4,8 +4,8 @@
 @using Microsoft.EntityFrameworkCore
 @using Survey.Persistence
 
-@inject SurveyRepository repo
-
+@inject SurveyRepository _repo
+@inject NavigationManager _navManager
 <div>
     @if (_items.Count > 0)
     {
@@ -18,11 +18,11 @@
     List<Domain.Models.Survey> _items = new();
     protected override async Task OnInitializedAsync()
     {
-        _items = await repo.GetAllSurveysAsync();
+        _items = await _repo.GetAllSurveysAsync();
     }
 
    async Task AddSurvey()
    {
-       
+       _navManager.NavigateTo("/AddSurvey");
    }
 } 

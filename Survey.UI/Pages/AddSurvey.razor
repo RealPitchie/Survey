@@ -1,0 +1,30 @@
+@page "/AddSurvey"
+
+@using Survey.Persistence
+@using Survey.Domain.Models
+
+@inject SurveyRepository Repo
+@inject NavigationManager NavManager
+
+<h3 style="text-align: center; width: auto">Новый опрос</h3>
+<div>
+    <div style="margin: 15px auto; width: 500px">
+        <MudTextField @bind-Value="_newSurvey.Name" Placeholder="Название" T="string"></MudTextField>
+        <MudTextField @bind-Value="_newSurvey.Author" Placeholder="Автор" T="string"></MudTextField> 
+        <MudTextField @bind-Value="_newSurvey.Description" Lines="5" Placeholder="Описание"></MudTextField>
+        <MudButton OnClick="Submit" Style="margin-top: 15px" Variant="Variant.Outlined" Color="Color.Primary">Добавить</MudButton>
+    </div>
+</div>
+
+
+@code {
+    
+    readonly Survey _newSurvey = new() {Id = Guid.NewGuid().ToString()};
+    
+    async Task Submit()
+    {
+        _newSurvey.CreatedAt = DateTime.Now;
+        await Repo.AddSurvey(_newSurvey);
+        NavManager.NavigateTo("/", true);
+    }
+}

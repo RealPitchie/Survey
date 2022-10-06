@@ -1,9 +1,50 @@
 ﻿@page "/"
+@using Survey.Domain.Models
+@using Survey.Persistence
 
-<PageTitle>Index</PageTitle>
+@inject SurveyRepository Repo
+ 
+ 
+<div class="container">
+    @if (_items.Count > 0)
+    {
+        <div class="card-columns"> 
+            @foreach (var survey in _items)
+            {
+                <div class="card" style="width: 380px; border: none">
+                    <MudCard  Elevation="3" Style="margin: 15px;">
+                        <MudCardHeader>
+                            <h5>@survey.Name</h5>
+                        </MudCardHeader>
+                        <hr/>
+                        <MudCardContent Style="overflow: scroll">
+                            <div style="text-align: right">
+                                <span style="color: gray; font-weight: bold">Автор: @survey.Author</span>
+                            </div>
+                            <br/>
+                            @foreach (var line in survey.Description.Split('\n'))
+                            {
+                                @line
+                            }
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary">Пройти опрос</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </div>
+                
 
-<h1>Hello, world!</h1>
+            }
+        </div>
+    }
+</div>
 
-Welcome to your new app.
+@code{
 
-<SurveyPrompt Title="How is Blazor working for you?"/>
+    List<Survey> _items = new();
+    protected override async Task OnInitializedAsync()
+    {
+        _items = await Repo.GetAllSurveysAsync();
+    }
+
+}
