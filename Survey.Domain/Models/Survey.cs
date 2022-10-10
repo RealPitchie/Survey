@@ -3,6 +3,7 @@ namespace Survey.Domain.Models;
 public class Survey
 {
     public string Id { get; set; }
+    public bool IsPublic { get; set; } = true;
     public string Name { get; set; }
     public string Author { get; set; }
     public string Description { get; set; }

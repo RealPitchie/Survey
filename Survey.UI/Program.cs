@@ -8,19 +8,26 @@ using Survey.Persistence;
 using Survey.UI.Areas.Identity;
 using Survey.UI.Data;
 using MudBlazor.Services;
+using Survey.UI.Data.Survey;
 
 var builder = WebApplication.CreateBuilder(args);
+
 var services = builder.Services;
+var connectionString = "UserID=root;Password=passmein123;Server=localhost;Port=5432;Database=survey;";
+
+services.AddDbContext<UIContext>(options =>
+    options.UseNpgsql(connectionString));
+
+services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<UIContext>();
+
 // Add services to the container. 
 services.AddDbContext<DataContext>(options =>
-    options.UseNpgsql("UserID=root;Password=passmein123;Server=localhost;Port=5432;Database=survey;"));
-services.AddDatabaseDeveloperPageExceptionFilter();
-services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<DataContext>();
+    options.UseNpgsql(connectionString));
+services.AddDatabaseDeveloperPageExceptionFilter(); 
 services.AddRazorPages();
 services.AddServerSideBlazor();
-services
-    .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 services.AddMudServices();
 services.AddScoped<SurveyRepository>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
