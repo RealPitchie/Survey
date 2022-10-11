@@ -2,7 +2,7 @@
 
 @if (_text.Length > 75)
 {
-    <p @onmouseover="() => MouseOver(_text.Length)" @onmouseout="MouseOut">
+    <p style="cursor: pointer" @onclick="() => MouseOver(_text.Length)" @onmouseout="MouseOut">
         @_text[.._descriptionLength] @moreString
     </p>
 }
