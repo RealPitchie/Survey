@@ -3,28 +3,45 @@
 @using Survey.Persistence
 
 @inject SurveyRepository Repo
- 
+
  
 <div class="container">
     @if (_items.Count > 0)
     {
-        <div class="card-columns"> 
+        <div class="row"> 
             @foreach (var survey in _items)
             {
-                <div class="card" style="width: 380px; border: none">
-                    <MudCard  Elevation="3" Style="margin: 15px;">
+                <div class="col-md-4" style="min-width: 200px; border: none">
+                    <MudCard  Elevation="3" Style="margin: 15px;border-radius: 10px;">
                         <MudCardHeader>
-                            <h5>@survey.Name</h5>
+                            
+                                @if (@survey.Name.Length > 25)
+                                {
+                                    <h5 @onmouseover="() => TitleMouseOver(survey.Name.Length)" @onmouseout="TitleMouseOut">
+                                        @survey.Name[.._titleLength] @titleMoreString
+                                    </h5>
+                                }
+                                else
+                                {
+                                    <h5>@survey.Name</h5>
+                                }
+                            
                         </MudCardHeader>
-                        <hr/>
+                        <MudDivider Light="true"/>
                         <MudCardContent Style="overflow: scroll">
                             <div style="text-align: right">
                                 <span style="color: gray; font-weight: bold">Автор: @survey.Author</span>
                             </div>
                             <br/>
-                            @foreach (var line in survey.Description.Split('\n'))
+                            @if (survey.Description.Length > 75)
                             {
-                                @line
+                                <p @onmouseover="() => MouseOver(survey.Description.Length)" @onmouseout="MouseOut">
+                                    @survey.Description[.._descriptionLength] @moreString
+                                </p>
+                            }
+                            else
+                            {
+                                <p>@survey.Description</p>
                             }
                         </MudCardContent>
                         <MudCardActions>
@@ -40,11 +57,38 @@
 </div>
 
 @code{
-
+    int _descriptionLength = 75;
+    int _titleLength = 25;
+    string moreString = "...";
+    string titleMoreString = "...";
     List<Survey> _items = new();
     protected override async Task OnInitializedAsync()
     {
         _items = await Repo.GetAllSurveysAsync();
+    }
+
+    void MouseOver(int targetLength)
+    { 
+        _descriptionLength = targetLength;        
+        moreString = String.Empty;
+    }
+
+    void MouseOut(MouseEventArgs e)
+    {
+        _descriptionLength = 75;
+        moreString = "...";
+    }
+
+    private void TitleMouseOver(int nameLength)
+    {
+        _titleLength = nameLength;
+        titleMoreString = String.Empty;
+    }
+
+    private void TitleMouseOut(MouseEventArgs e)
+    {
+        _titleLength = 25;
+        titleMoreString = "...";
     }
 
 }
