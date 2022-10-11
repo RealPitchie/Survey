@@ -1,10 +1,11 @@
 ﻿@page "/"
 @using Survey.Domain.Models
 @using Survey.Persistence
+@using WebComponents
 
 @inject SurveyRepository Repo
 
- 
+
 <div class="container">
     @if (_items.Count > 0)
     {
@@ -14,18 +15,7 @@
                 <div class="col-md-4" style="min-width: 200px; border: none">
                     <MudCard  Elevation="3" Style="margin: 15px;border-radius: 10px;">
                         <MudCardHeader>
-                            
-                                @if (@survey.Name.Length > 25)
-                                {
-                                    <h5 @onmouseover="() => TitleMouseOver(survey.Name.Length)" @onmouseout="TitleMouseOut">
-                                        @survey.Name[.._titleLength] @titleMoreString
-                                    </h5>
-                                }
-                                else
-                                {
-                                    <h5>@survey.Name</h5>
-                                }
-                            
+                            <CustomCardTitle Text="@survey.Name" />
                         </MudCardHeader>
                         <MudDivider Light="true"/>
                         <MudCardContent Style="overflow: scroll">
@@ -33,16 +23,7 @@
                                 <span style="color: gray; font-weight: bold">Автор: @survey.Author</span>
                             </div>
                             <br/>
-                            @if (survey.Description.Length > 75)
-                            {
-                                <p @onmouseover="() => MouseOver(survey.Description.Length)" @onmouseout="MouseOut">
-                                    @survey.Description[.._descriptionLength] @moreString
-                                </p>
-                            }
-                            else
-                            {
-                                <p>@survey.Description</p>
-                            }
+                            <Description Text="@survey.Description"/>
                         </MudCardContent>
                         <MudCardActions>
                             <MudButton Variant="Variant.Text" Color="Color.Primary">Пройти опрос</MudButton>
@@ -56,39 +37,12 @@
     }
 </div>
 
-@code{
-    int _descriptionLength = 75;
-    int _titleLength = 25;
-    string moreString = "...";
-    string titleMoreString = "...";
+@code{ 
     List<Survey> _items = new();
     protected override async Task OnInitializedAsync()
     {
         _items = await Repo.GetAllSurveysAsync();
     }
-
-    void MouseOver(int targetLength)
-    { 
-        _descriptionLength = targetLength;        
-        moreString = String.Empty;
-    }
-
-    void MouseOut(MouseEventArgs e)
-    {
-        _descriptionLength = 75;
-        moreString = "...";
-    }
-
-    private void TitleMouseOver(int nameLength)
-    {
-        _titleLength = nameLength;
-        titleMoreString = String.Empty;
-    }
-
-    private void TitleMouseOut(MouseEventArgs e)
-    {
-        _titleLength = 25;
-        titleMoreString = "...";
-    }
+ 
 
 }

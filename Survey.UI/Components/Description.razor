@@ -1,0 +1,35 @@
+@namespace WebComponents
+
+@if (_text.Length > 75)
+{
+    <p @onmouseover="() => MouseOver(_text.Length)" @onmouseout="MouseOut">
+        @_text[.._descriptionLength] @moreString
+    </p>
+}
+else
+{
+    <p>@_text</p>
+}
+
+@code {
+    [Parameter]
+    public string Text { get; set; }
+    int _descriptionLength = 75; 
+    string moreString = "...";
+    string _text;
+    protected override void OnInitialized()
+    {
+        _text = Text;
+    }
+    void MouseOver(int targetLength)
+    { 
+        _descriptionLength = targetLength;        
+        moreString = String.Empty;
+    }
+
+    void MouseOut(MouseEventArgs e)
+    {
+        _descriptionLength = 75;
+        moreString = "...";
+    }
+}
