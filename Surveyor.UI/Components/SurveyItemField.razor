@@ -1,0 +1,48 @@
+@using Microsoft.AspNetCore.Components
+@using Surveyor.Domain.Models
+ 
+@namespace WebComponents
+
+<div style="margin-bottom: 15px">
+    <MudPaper style="padding: 15px" Elevation="2">
+        <MudTextField T="string" HelperText="Вопрос" @bind-Value="_surveyItem.Name" />
+        <MudSelect ToStringFunc="(args) => Converter(args)" HelperText="Тип поля" @bind-Value="_surveyItem.Type">
+            
+            <MudSelectItem Value="ItemType.Text">Текст</MudSelectItem>
+            <MudSelectItem Value="ItemType.List">Список</MudSelectItem>
+            <MudSelectItem Value="ItemType.YesNo">Да / Нет</MudSelectItem>
+        </MudSelect>
+        @if (_surveyItem.Type == ItemType.Text)
+        {
+            <MudTextField T="string" @bind-Value="_surveyItem.Options" HelperText="Ваш ответ" Lines="3" />
+        }
+        @if (_surveyItem.Type == ItemType.List)
+        {
+            <MudTextField T="string" @bind-Value="_surveyItem.Options" HelperText="Варианты ответов (каждый с новой строки)" Lines="5" />
+        } 
+        <MudButton OnClick="Submit" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary">Сохранить</MudButton>
+    </MudPaper>
+</div>
+
+@code { 
+    [Parameter]
+    public EventCallback<SurveyItem> OnSubmit { get; set; }
+    SurveyItem _surveyItem = new() { Id = Guid.NewGuid().ToString(), Options = string.Empty };
+    bool _option; 
+    private string Converter<T>(T arg)
+    {
+        return arg switch
+        {
+            0 => "Список",
+            1 => "Текст",
+            2 => "Да / Нет",
+            _ => "Список"
+            };
+    }
+
+    private void Submit()
+    {
+        OnSubmit.InvokeAsync(_surveyItem);
+    }
+
+}

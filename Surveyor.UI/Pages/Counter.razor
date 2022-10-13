@@ -1,0 +1,27 @@
+﻿@page "/surveys"
+ 
+@using Surveyor.Domain.Models
+@using Surveyor.Persistence
+
+@inject SurveyRepository _repo
+@inject NavigationManager _navManager
+<div>
+    @if (_items.Count > 0)
+    {
+    }
+</div>
+<MudButton OnClick="() => AddSurvey()" Variant="Variant.Outlined" Color="Color.Default">Добавить опрос</MudButton>
+
+
+@code {
+    List<Survey> _items = new();
+    protected override async Task OnInitializedAsync()
+    {
+        _items = await _repo.GetAllSurveysAsync();
+    }
+
+   async Task AddSurvey()
+   {
+       _navManager.NavigateTo("/AddSurvey");
+   }
+} 

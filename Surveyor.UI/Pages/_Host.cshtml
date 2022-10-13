@@ -1,0 +1,11 @@
+﻿@page "/"
+@using Surveyor.UI
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@namespace Surveyor.UI.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "_Layout";
+}
+
+<component type="typeof(App)" render-mode="ServerPrerendered"/>
+
