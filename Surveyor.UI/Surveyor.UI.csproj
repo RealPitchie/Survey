@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Survey.Persistence\Survey.Persistence.csproj" />
+      <ProjectReference Include="..\Surveyor.Persistence\Surveyor.Persistence.csproj" />
       <ProjectReference Include="..\Surveyor.Domain\Surveyor.Domain.csproj" />
       <ProjectReference Include="..\Surveyor.Persistence\Surveyor.Persistence.csproj" /> 
     </ItemGroup>

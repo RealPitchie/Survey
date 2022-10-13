@@ -13,7 +13,7 @@ using Surveyor.UI.Data.Surveyor;
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
-var connectionString = "UserID=root;Password=passmein123;Server=localhost;Port=5432;Database=survey;";
+const string connectionString = "UserID=root;Password=passmein123;Server=localhost;Port=5432;Database=survey;";
 
 services.AddDbContext<UIContext>(options =>
     options.UseNpgsql(connectionString));
