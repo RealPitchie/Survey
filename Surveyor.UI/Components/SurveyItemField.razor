@@ -4,30 +4,29 @@
 @namespace WebComponents
 
 <div style="margin-bottom: 15px">
-    <MudPaper style="padding: 15px" Elevation="2">
-        <MudTextField T="string" HelperText="Вопрос" @bind-Value="_surveyItem.Name" />
-        <MudSelect ToStringFunc="(args) => Converter(args)" HelperText="Тип поля" @bind-Value="_surveyItem.Type">
-            
+    <MudPaper style="padding: 5px 15px 15px 15px " Elevation="2">
+        <MudText Typo="Typo.subtitle2" Style="color: lightgray">Новое поле</MudText>
+        <MudTextField T="string" HelperText="Вопрос" @bind-Value="Item.Name"/>
+        <MudSelect ToStringFunc="(args) => Converter(args)" HelperText="Тип поля" @bind-Value="Item.Type">
+
             <MudSelectItem Value="ItemType.Text">Текст</MudSelectItem>
             <MudSelectItem Value="ItemType.List">Список</MudSelectItem>
             <MudSelectItem Value="ItemType.YesNo">Да / Нет</MudSelectItem>
         </MudSelect>
-        @if (_surveyItem.Type == ItemType.Text)
+        @if (Item.Type == ItemType.List)
         {
-            <MudTextField T="string" @bind-Value="_surveyItem.Options" HelperText="Ваш ответ" Lines="3" />
+            <MudTextField T="string" @bind-Value="Item.Options" HelperText="Варианты ответов (каждый с новой строки)" Lines="5"/>
         }
-        @if (_surveyItem.Type == ItemType.List)
-        {
-            <MudTextField T="string" @bind-Value="_surveyItem.Options" HelperText="Варианты ответов (каждый с новой строки)" Lines="5" />
-        } 
         <MudButton OnClick="Submit" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary">Сохранить</MudButton>
     </MudPaper>
 </div>
 
 @code { 
     [Parameter]
+    public SurveyItem Item { get; set; }
+    [Parameter]
     public EventCallback<SurveyItem> OnSubmit { get; set; }
-    SurveyItem _surveyItem = new() { Id = Guid.NewGuid().ToString(), Options = string.Empty };
+    // SurveyItem SurveyItem = new() { Id = Guid.NewGuid().ToString(), Options = string.Empty };
     bool _option; 
     private string Converter<T>(T arg)
     {
@@ -42,7 +41,8 @@
 
     private void Submit()
     {
-        OnSubmit.InvokeAsync(_surveyItem);
+        Item.Id = Guid.NewGuid().ToString(); 
+        OnSubmit.InvokeAsync(Item);
     }
 
 }
