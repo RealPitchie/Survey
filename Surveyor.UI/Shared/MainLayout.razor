@@ -14,8 +14,12 @@
             <LoginDisplay /> 
         </div>
 
-        <article class="content px-4" style="margin-left: 10%">
-            @Body
-        </article>
+        <AuthorizeView>
+            <Authorized>
+                 <article class="content px-4" style="margin-left: 10%">
+                    @Body
+                </article>
+            </Authorized>
+        </AuthorizeView>
     </main>
 </div>
