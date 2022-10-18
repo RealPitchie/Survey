@@ -42,19 +42,14 @@
 </div>
 
 @code{ 
-    List<Survey> _items = new();
-    int _hoverCardElevation = 3;
+    List<Survey> _items = new(); 
     protected override async Task OnInitializedAsync()
     {
         _items = await Repo.GetAllSurveysAsync();
     }
+ 
 
-    void OnCardHover()
-    {
-        _hoverCardElevation = 5;
-    }
-
-    async Task AddSurvey()
+    void AddSurvey()
     {
         _navManager.NavigateTo("/AddSurvey");
     }

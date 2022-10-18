@@ -1,5 +1,5 @@
 @namespace WebComponents  
-@if (_title.Length > 25)
+@if (_title!.Length > 25)
     {
         <h5 style="cursor: pointer" @onclick="() => TitleMouseOver(_title.Length)" @onmouseout="TitleMouseOut">
             @_title[.._titleLength] @_titleMoreString
@@ -15,7 +15,7 @@
     [Parameter]
     public string? Text { get; set; }
 
-    string _title = "Text";
+    string? _title = "Text";
     int _titleLength = 25;
     string _titleMoreString = "...";
     protected override void OnInitialized()
@@ -26,7 +26,7 @@
     private void TitleMouseOver(int nameLength)
     {
         _titleLength = nameLength;
-        _titleMoreString = String.Empty;
+        _titleMoreString = string.Empty;
     }
 
     private void TitleMouseOut(MouseEventArgs e)

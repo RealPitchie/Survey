@@ -6,8 +6,8 @@
 <div style="margin-bottom: 15px">
     <MudPaper style="padding: 5px 15px 15px 15px " Elevation="2">
         <MudText Typo="Typo.subtitle2" Style="font-size: small ;color: darkgray">Новое поле</MudText>
-        <MudTextField T="string" HelperText="Вопрос" @bind-Value="Item.Name"/>
-        <MudSelect ToStringFunc="(args) => Converter(args)" HelperText="Тип поля" @bind-Value="Item.Type">
+        <MudTextField T="string" HelperText="Вопрос" @bind-Value="Item!.Name"/>
+        <MudSelect ToStringFunc="(args) => Converter(args)" HelperText="Тип поля" @bind-Value="Item!.Type">
 
             <MudSelectItem Value="ItemType.Text">Текст</MudSelectItem>
             <MudSelectItem Value="ItemType.List">Список</MudSelectItem>
@@ -23,11 +23,9 @@
 
 @code { 
     [Parameter]
-    public SurveyItem Item { get; set; }
+    public SurveyItem? Item { get; set; }
     [Parameter]
-    public EventCallback<SurveyItem> OnSubmit { get; set; }
-    // SurveyItem SurveyItem = new() { Id = Guid.NewGuid().ToString(), Options = string.Empty };
-    bool _option; 
+    public EventCallback<SurveyItem> OnSubmit { get; set; } 
     private string Converter<T>(T arg)
     {
         return arg switch
@@ -41,7 +39,7 @@
 
     private void Submit()
     {
-        Item.Id = Guid.NewGuid().ToString(); 
+        Item!.Id = Guid.NewGuid().ToString(); 
         OnSubmit.InvokeAsync(Item);
     }
 

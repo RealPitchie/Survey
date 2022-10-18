@@ -1,9 +1,9 @@
 @namespace WebComponents
 
-@if (_text.Length > 75)
+@if (_text!.Length > 75)
 {
     <p style="cursor: pointer" @onclick="() => MouseOver(_text.Length)" @onmouseout="MouseOut">
-        @_text[.._descriptionLength] @moreString
+        @_text[.._descriptionLength] @_moreString
     </p>
 }
 else
@@ -13,10 +13,10 @@ else
 
 @code {
     [Parameter]
-    public string Text { get; set; }
+    public string? Text { get; set; }
     int _descriptionLength = 75; 
-    string moreString = "...";
-    string _text;
+    string _moreString = "...";
+    string? _text;
     protected override void OnInitialized()
     {
         _text = Text;
@@ -24,12 +24,12 @@ else
     void MouseOver(int targetLength)
     { 
         _descriptionLength = targetLength;        
-        moreString = String.Empty;
+        _moreString = string.Empty;
     }
 
     void MouseOut(MouseEventArgs e)
     {
         _descriptionLength = 75;
-        moreString = "...";
+        _moreString = "...";
     }
 }
