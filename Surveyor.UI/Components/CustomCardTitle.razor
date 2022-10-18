@@ -1,15 +1,7 @@
 @namespace WebComponents  
-@if (_title!.Length > 25)
-    {
-        <h5 style="cursor: pointer" @onclick="() => TitleMouseOver(_title.Length)" @onmouseout="TitleMouseOut">
-            @_title[.._titleLength] @_titleMoreString
-        </h5>
-    }
-    else
-    {
-        <h5>@_title</h5>
-    }
+ 
 
+    
 @code{
     
     [Parameter]

@@ -17,32 +17,33 @@
     @if (_items.Count > 0)
     {
         <div class="row">
-            @foreach (var survey in _items)
-            {
-                <div class="col-md-4" style="min-width: 200px; border: none">
-                    <MudCard Elevation=2 Class="hoverable-card" Style="margin: 15px;border-radius: 10px;">
-                        <MudCardHeader>
-                            <CustomCardTitle Text="@survey.Name"/>
-                        </MudCardHeader>
-                        <MudDivider Light="true"/>
-                        <MudCardContent Style="overflow: scroll">
-                            <Author Text="@survey.Author"/>
-                            <Description Text="@survey.Description"/>
-                        </MudCardContent>
-                        <MudCardActions>
-                            <MudButton Variant="Variant.Text" Color="Color.Primary">Пройти опрос</MudButton>
-                        </MudCardActions>
+            <div class="col-md-4 ">
+                @foreach (var survey in _items)
+                {
+                    <div style="min-width: 200px; border: none">
+                        <MudCard Elevation=2 Class="hoverable-card" Style="margin: 15px;border-radius: 10px; cursor: pointer">
+                            <MudCardHeader @onclick="() => SetItem(survey)">
+                                <h5>@survey.Name</h5>
+                            </MudCardHeader> 
+                        </MudCard>
+                    </div>
+                }
+            </div>
+            <div class="col-md-8">
+                @if (!string.IsNullOrEmpty(_targetSurvey.Name))
+                {
+                    <MudCard Elevation="3" Outlined="true" Style="padding: 10px; ">
+                        <SurveyPreview OnSubmit="PassSurvey" Item="@_targetSurvey" />
                     </MudCard>
-                </div>
-
-
-            }
+                }
+            </div>
         </div>
     }
 </div>
 
 @code{ 
-    List<Survey> _items = new(); 
+    List<Survey> _items = new();
+    Survey _targetSurvey = new();
     protected override async Task OnInitializedAsync()
     {
         _items = await Repo.GetAllSurveysAsync();
@@ -53,4 +54,15 @@
     {
         _navManager.NavigateTo("/AddSurvey");
     }
+
+    void SetItem(Survey targetItem)
+    {
+        _targetSurvey = targetItem;
+    } 
+
+    private void PassSurvey()
+    {
+         
+    }
+
 }

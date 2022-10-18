@@ -1,0 +1,16 @@
+@using Surveyor.Domain.Models 
+@namespace WebComponents
+
+
+<h3 style="color: darkgray">@Item.Name</h3>
+<h5 style="font-weight: lighter">@Item.Description</h5>
+<MudDivider Light="true" Style="margin: 20px auto"/>
+<MudButton Variant="Variant.Outlined" Color="Color.Primary">Пройти опрос</MudButton>
+@code {
+    #nullable disable
+    [Parameter]
+    public Survey Item { get; set; }
+    [Parameter]
+    public EventCallback<Survey> OnSubmit { get; set; }
+
+}
