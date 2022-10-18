@@ -5,7 +5,7 @@
 
 <div style="margin-bottom: 15px">
     <MudPaper style="padding: 5px 15px 15px 15px " Elevation="2">
-        <MudText Typo="Typo.subtitle2" Style="color: lightgray">Новое поле</MudText>
+        <MudText Typo="Typo.subtitle2" Style="font-size: small ;color: darkgray">Новое поле</MudText>
         <MudTextField T="string" HelperText="Вопрос" @bind-Value="Item.Name"/>
         <MudSelect ToStringFunc="(args) => Converter(args)" HelperText="Тип поля" @bind-Value="Item.Type">
 
@@ -17,7 +17,7 @@
         {
             <MudTextField T="string" @bind-Value="Item.Options" HelperText="Варианты ответов (каждый с новой строки)" Lines="5"/>
         }
-        <MudButton OnClick="Submit" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary">Сохранить</MudButton>
+        <MudButton OnClick="Submit" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary">Добавить</MudButton>
     </MudPaper>
 </div>
 

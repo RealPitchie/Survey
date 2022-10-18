@@ -9,37 +9,36 @@
 @inject NavigationManager NavManager
 
 <h3 style="text-align: center; width: auto">Новый опрос</h3>
-<div>
-    <div style="margin: 15px auto; max-width: 500px">
+<div class="row">
+    <div class="col-md-6" style="margin: 15px auto; max-width: 500px">
         <MudTextField @bind-Value="_newSurvey.Name" Placeholder="Название" T="string"></MudTextField>
         <MudTextField @bind-Value="_newSurvey.Author" Placeholder="Автор" T="string"></MudTextField> 
         <MudTextField @bind-Value="_newSurvey.Description" Lines="5" Placeholder="Описание"></MudTextField>
     </div>
-    <div style="margin: 15px auto; max-width: 500px">
-        <h3>Поля опроса</h3>
+    <div class="col-md-6" style="margin: 15px auto; max-width: 500px">
+        <h5>Поля опроса</h5>
         @* <MudButton Size="Size.Small" Variant="Variant.Outlined" Style="margin-bottom: 15px" OnClick="AddSurveyField"> *@
         @*     Добавить поле *@
         @* </MudButton> *@
-        <div class="row" >
+        <div class="row" style="margin-left: -10px ;">
             @foreach (var field in _newSurvey.Items)
             {
-                <MudCard Elevation="3" Outlined="true" Style="width: 150px; margin: 10px; padding: 5px">
-                    <p> @field.Name</p>
-                    <p>@FieldTypeToString(field)</p>
+                <MudCard Elevation="3" Outlined="true" Style="  margin: 10px; padding: 5px">
+                    <span style="font-size: x-small; color: darkgray">Вопрос: </span><span style="font-size: x-small"> @field.Name</span><br/>
+                    <span style="font-size: x-small; color: darkgray">Тип: </span><span style="font-size: x-small">@FieldTypeToString(field)</span>
                 </MudCard>
             }
         </div>
-         <SurveyItemField Item="new SurveyItem { Id = Guid.NewGuid().ToString(), Options = string.Empty }" OnSubmit="(args) => AddNewField(args)" />
+        <SurveyItemField Item="new SurveyItem { Id = Guid.NewGuid().ToString(), Options = string.Empty }" OnSubmit="(args) => AddNewField(args)" />
+        <div class="row" style="margin: 15px auto; max-width: 500px">
+            <MudButton OnClick="Submit" Style="margin-top: 15px" Variant="Variant.Outlined" Color="Color.Primary">Сохранить</MudButton>
+        </div>
     </div>
-    <div style="margin: 15px auto; max-width: 500px">
-        <MudButton OnClick="Submit" Style="margin-top: 15px" Variant="Variant.Outlined" Color="Color.Primary">Сохранить</MudButton>
-    </div>
+    
 </div>  
 
 @code { 
-    readonly Survey _newSurvey = new() {Id = Guid.NewGuid().ToString(), Items = new List<SurveyItem>()};
-
-    SurveyItem Item = new(); 
+    readonly Survey _newSurvey = new() {Id = Guid.NewGuid().ToString(), Items = new List<SurveyItem>()}; 
 
     async Task Submit()
     {
@@ -53,7 +52,7 @@
         _newSurvey.Items.Add(field);
     }
 
-    string FieldTypeToString(SurveyItem field)
+    static string FieldTypeToString(SurveyItem field)
     {
         return field.Type switch
         {

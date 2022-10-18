@@ -22,7 +22,7 @@ namespace Surveyor.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Surveyor.Domain.Models.Surveyor", b =>
+            modelBuilder.Entity("Surveyor.Domain.Models.Survey", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -55,11 +55,14 @@ namespace Surveyor.Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("Options")
+                        .HasColumnType("text");
+
                     b.Property<string>("SurveyId")
                         .HasColumnType("text");
 
-                    b.Property<string>("Type")
-                        .HasColumnType("text");
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -68,49 +71,16 @@ namespace Surveyor.Persistence.Migrations
                     b.ToTable("SurveyItem");
                 });
 
-            modelBuilder.Entity("Surveyor.Domain.Models.SurveyItemOption", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SurveyItemId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SurveyItemId");
-
-                    b.ToTable("SurveyItemOption");
-                });
-
             modelBuilder.Entity("Surveyor.Domain.Models.SurveyItem", b =>
                 {
-                    b.HasOne("Surveyor.Domain.Models.Surveyor", null)
+                    b.HasOne("Surveyor.Domain.Models.Survey", null)
                         .WithMany("Items")
                         .HasForeignKey("SurveyId");
                 });
 
-            modelBuilder.Entity("Surveyor.Domain.Models.SurveyItemOption", b =>
-                {
-                    b.HasOne("Surveyor.Domain.Models.SurveyItem", null)
-                        .WithMany("Options")
-                        .HasForeignKey("SurveyItemId");
-                });
-
-            modelBuilder.Entity("Surveyor.Domain.Models.Surveyor", b =>
+            modelBuilder.Entity("Surveyor.Domain.Models.Survey", b =>
                 {
                     b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("Surveyor.Domain.Models.SurveyItem", b =>
-                {
-                    b.Navigation("Options");
                 });
 #pragma warning restore 612, 618
         }
