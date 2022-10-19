@@ -1,0 +1,29 @@
+@page "/passTheSurvey/{_targetSurvey}"
+@using WebComponents
+@using Surveyor.Domain.Models
+@using Surveyor.Persistence
+
+@inject SurveyRepository Repo 
+
+@if (_survey != null)
+{
+    
+    <QAForm Survey="@_survey" OnSubmit="() => SubmitSurvey()"/>
+}
+
+@code {
+    [Parameter]
+    public string _targetSurvey { get; set; }
+
+    private Survey _survey;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _survey = await Repo.GetByIdAsync(_targetSurvey);
+    }
+
+    async Task SubmitSurvey()
+    {
+        
+    }
+}

@@ -22,6 +22,25 @@ namespace Surveyor.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Surveyor.Domain.Models.Answer", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SurveyId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SurveyId");
+
+                    b.ToTable("Answer");
+                });
+
             modelBuilder.Entity("Surveyor.Domain.Models.Survey", b =>
                 {
                     b.Property<string>("Id")
@@ -71,6 +90,13 @@ namespace Surveyor.Persistence.Migrations
                     b.ToTable("SurveyItem");
                 });
 
+            modelBuilder.Entity("Surveyor.Domain.Models.Answer", b =>
+                {
+                    b.HasOne("Surveyor.Domain.Models.Survey", null)
+                        .WithMany("Answers")
+                        .HasForeignKey("SurveyId");
+                });
+
             modelBuilder.Entity("Surveyor.Domain.Models.SurveyItem", b =>
                 {
                     b.HasOne("Surveyor.Domain.Models.Survey", null)
@@ -80,6 +106,8 @@ namespace Surveyor.Persistence.Migrations
 
             modelBuilder.Entity("Surveyor.Domain.Models.Survey", b =>
                 {
+                    b.Navigation("Answers");
+
                     b.Navigation("Items");
                 });
 #pragma warning restore 612, 618

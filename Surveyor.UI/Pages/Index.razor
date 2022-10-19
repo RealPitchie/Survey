@@ -7,13 +7,7 @@
 @inject NavigationManager _navManager
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <MudButton Style="margin: 15px" OnClick="() => AddSurvey()" Variant="Variant.Outlined" Color="Color.Default">
-                Добавить опрос
-            </MudButton>
-        </div>
-    </div>
+     
     @if (_items.Count > 0)
     {
         <div class="row">
@@ -21,7 +15,7 @@
                 @foreach (var survey in _items)
                 {
                     <div style="min-width: 200px; border: none">
-                        <MudCard Elevation=2 Class="hoverable-card" Style="margin: 15px;border-radius: 10px; cursor: pointer">
+                        <MudCard Elevation=2 Class="hoverable-card" Style="margin: 0 15px 15px ;border-radius: 10px; cursor: pointer">
                             <MudCardHeader @onclick="() => SetItem(survey)">
                                 <h5>@survey.Name</h5>
                             </MudCardHeader> 
@@ -47,13 +41,7 @@
     protected override async Task OnInitializedAsync()
     {
         _items = await Repo.GetAllSurveysAsync();
-    }
- 
-
-    void AddSurvey()
-    {
-        _navManager.NavigateTo("/AddSurvey");
-    }
+    } 
 
     void SetItem(Survey targetItem)
     {

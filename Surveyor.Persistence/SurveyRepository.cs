@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Surveyor.Application.Interfaces;
 
 namespace Surveyor.Persistence;
-
+#nullable disable
 public class SurveyRepository : ISurveyRepository
 {
     private DataContext _context;
@@ -34,8 +34,12 @@ public class SurveyRepository : ISurveyRepository
         return await _context.Surveys.ToListAsync();
     }
 
-    public async Task<Domain.Models.Survey?> GetByIdAsync(string id)
+    public async Task<Domain.Models.Survey> GetByIdAsync(string id)
     { 
-        return await _context.Surveys.FirstOrDefaultAsync(s => s.Id == id);
+        return await _context.Surveys
+            .Include(s => s.Items)
+            .Include(s => s.Answers)
+            .AsSplitQuery()
+            .FirstOrDefaultAsync(s => s.Id == id);
     }
 }

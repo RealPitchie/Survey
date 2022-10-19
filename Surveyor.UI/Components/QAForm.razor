@@ -1,0 +1,78 @@
+@using Surveyor.Domain.Models
+@namespace WebComponents
+ 
+<MudPaper Elevation="3" style="margin: 15px auto; padding: 15px; max-width: 500px">
+    <h4>@Survey.Name</h4>
+    @if (_question != null)
+    {
+        @if (!string.IsNullOrEmpty(_question.Name))
+        {
+            <p>@_question.Name</p>
+            @if (_question.Type == ItemType.List)
+            {
+                <MudSelect T="string" @bind-Value="@_currentAnswer.Value">
+                    @foreach (var option in _question.Options.Split('\n'))
+                    {
+                        <MudSelectItem T="string" Value="@option">@option</MudSelectItem>
+                    }
+                </MudSelect>
+
+            }
+            @if (_question.Type == ItemType.Text)
+            {
+                <MudTextField T="string" Lines="5" Outline="true" @bind-Value="@_currentAnswer.Value"></MudTextField>
+            }
+            @if (_question.Type == ItemType.YesNo)
+            {
+                <MudSwitch @bind-Checked="@_currentAnswer.Value"></MudSwitch>
+            }
+
+            <MudButton Size="Size.Small" Variant="Variant.Text" OnClick="Answer">Далее</MudButton>
+        }
+        @if (string.IsNullOrEmpty(_question.Name))
+        {
+            @foreach (var item in Survey.Answers)
+            {
+                <p>@item.Value</p>
+            }
+            <MudButton Size="Size.Small" Variant="Variant.Text" OnClick="Submit">Завершить</MudButton>
+        }
+    }
+
+</MudPaper>
+@code {
+    #nullable disable
+    [Parameter, EditorRequired]
+    public Survey Survey { get; set; }
+    [Parameter, EditorRequired]
+    public EventCallback<Survey> OnSubmit { get; set; }
+
+    int _index = 0;
+    SurveyItem _question;
+    Answer _currentAnswer = new();
+    protected override void OnInitialized()
+    {
+        if(Survey.Items != null) _question = Survey.Items[_index];
+    }
+
+    string BoolToString(bool args)
+    {
+        return args switch
+        {
+            true => "Да",
+            false => "Нет"
+            };
+    }
+    void Answer()
+    {
+        Survey.Answers.Add(_currentAnswer);
+        _currentAnswer = new Answer();
+        _index++;
+        _question = Survey.Items.Count > _index? Survey.Items[_index] : new SurveyItem();
+    }
+
+    async Task Submit()
+    {
+        await OnSubmit.InvokeAsync();
+    }
+}

@@ -8,5 +8,6 @@ public class Survey
     public string Author { get; set; }
     public string Description { get; set; }
     public DateTime CreatedAt { get; set; }
-    public virtual ICollection<SurveyItem> Items { get; set; }
+    public virtual List<SurveyItem> Items { get; set; }
+    public virtual List<Answer> Answers { get; set; }
 }
