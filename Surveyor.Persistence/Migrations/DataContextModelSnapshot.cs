@@ -27,7 +27,7 @@ namespace Surveyor.Persistence.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
-                    b.Property<string>("SurveyId")
+                    b.Property<string>("SurveyResultId")
                         .HasColumnType("text");
 
                     b.Property<string>("Value")
@@ -36,7 +36,7 @@ namespace Surveyor.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SurveyId");
+                    b.HasIndex("SurveyResultId");
 
                     b.ToTable("Answer");
                 });
@@ -61,7 +61,12 @@ namespace Surveyor.Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("ResultId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ResultId");
 
                     b.ToTable("Surveys");
                 });
@@ -90,11 +95,33 @@ namespace Surveyor.Persistence.Migrations
                     b.ToTable("SurveyItem");
                 });
 
+            modelBuilder.Entity("Surveyor.Domain.Models.SurveyResult", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("PassedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SurveyResult");
+                });
+
             modelBuilder.Entity("Surveyor.Domain.Models.Answer", b =>
                 {
-                    b.HasOne("Surveyor.Domain.Models.Survey", null)
+                    b.HasOne("Surveyor.Domain.Models.SurveyResult", null)
                         .WithMany("Answers")
-                        .HasForeignKey("SurveyId");
+                        .HasForeignKey("SurveyResultId");
+                });
+
+            modelBuilder.Entity("Surveyor.Domain.Models.Survey", b =>
+                {
+                    b.HasOne("Surveyor.Domain.Models.SurveyResult", "Result")
+                        .WithMany()
+                        .HasForeignKey("ResultId");
+
+                    b.Navigation("Result");
                 });
 
             modelBuilder.Entity("Surveyor.Domain.Models.SurveyItem", b =>
@@ -106,9 +133,12 @@ namespace Surveyor.Persistence.Migrations
 
             modelBuilder.Entity("Surveyor.Domain.Models.Survey", b =>
                 {
-                    b.Navigation("Answers");
-
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Surveyor.Domain.Models.SurveyResult", b =>
+                {
+                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

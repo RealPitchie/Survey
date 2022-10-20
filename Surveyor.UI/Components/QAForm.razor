@@ -10,7 +10,7 @@
             <p>@_question.Name</p>
             @if (_question.Type == ItemType.List)
             {
-                <MudSelect T="string" @bind-Value="@_currentAnswer.Value">
+                <MudSelect Placeholder="Выберите ответ" T="string" @bind-Value="@_currentAnswer.Value">
                     @foreach (var option in _question.Options.Split('\n'))
                     {
                         <MudSelectItem T="string" Value="@option">@option</MudSelectItem>
@@ -24,18 +24,28 @@
             }
             @if (_question.Type == ItemType.YesNo)
             {
-                <MudSwitch @bind-Checked="@_currentAnswer.Value"></MudSwitch>
+                <MudSwitch 
+                    @bind-Checked="_currentAnswer.Value"
+                    Color="Color.Error"
+                    Converter="@(new CustomStringToBoolConverter())">
+                        @_currentAnswer.Value
+                </MudSwitch>
+                @* <MudSwitch @bind-Checked="@_currentAnswer.Value"></MudSwitch> *@
             }
-
-            <MudButton Size="Size.Small" Variant="Variant.Text" OnClick="Answer">Далее</MudButton>
+            @if (_isAlerted)
+            {
+                <MudAlert Severity="Severity.Error" >Вы не дали ответ</MudAlert>
+            }
+            <MudDivider Light="true" Style="margin-bottom: 15px"/>
+            <MudButton Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined" OnClick="Answer">Далее</MudButton>
         }
         @if (string.IsNullOrEmpty(_question.Name))
         {
-            @foreach (var item in Survey.Answers)
+            @foreach (var item in Survey.Result.Answers)
             {
                 <p>@item.Value</p>
             }
-            <MudButton Size="Size.Small" Variant="Variant.Text" OnClick="Submit">Завершить</MudButton>
+            <MudButton Size="Size.Small" Variant="Variant.Outlined" OnClick="Submit">Завершить</MudButton>
         }
     }
 
@@ -50,6 +60,8 @@
     int _index = 0;
     SurveyItem _question;
     Answer _currentAnswer = new();
+    bool _isAlerted = false;
+    
     protected override void OnInitialized()
     {
         if(Survey.Items != null) _question = Survey.Items[_index];
@@ -65,14 +77,67 @@
     }
     void Answer()
     {
-        Survey.Answers.Add(_currentAnswer);
+        if (string.IsNullOrEmpty(_currentAnswer.Value))
+        {
+            _isAlerted = true;
+            return;
+        }
+        Survey.Result.Answers.Add(_currentAnswer);
         _currentAnswer = new Answer();
         _index++;
         _question = Survey.Items.Count > _index? Survey.Items[_index] : new SurveyItem();
+        _isAlerted = false;
     }
 
     async Task Submit()
     {
         await OnSubmit.InvokeAsync();
+    }
+    public class CustomStringToBoolConverter : BoolConverter<string>
+    {
+
+        public CustomStringToBoolConverter()
+        {
+            SetFunc = OnSet;
+            GetFunc = OnGet;
+        }
+
+        private string TrueString = "Да";
+        private string FalseString = "Нет";
+        private string NullString = "Не знаю";
+
+        private string OnGet(bool? value)
+        {
+            try
+            {
+                return (value == true) ? TrueString : FalseString;
+            }
+            catch (Exception e)
+            {
+                UpdateGetError("Conversion error: " + e.Message);
+                return NullString;
+            }
+        }
+
+        private bool? OnSet(string arg)
+        {
+            if (arg == null)
+                return null;
+            try
+            {
+                if (arg == TrueString)
+                    return true;
+                if (arg == FalseString)
+                    return false;
+                else
+                    return null;
+            }
+            catch (FormatException e)
+            {
+                UpdateSetError("Conversion error: " + e.Message);
+                return null;
+            }
+        }
+
     }
 }

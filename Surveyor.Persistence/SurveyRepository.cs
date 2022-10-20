@@ -38,7 +38,8 @@ public class SurveyRepository : ISurveyRepository
     { 
         return await _context.Surveys
             .Include(s => s.Items)
-            .Include(s => s.Answers)
+            .Include(s => s.Result)
+            .ThenInclude(r => r.Answers)
             .AsSplitQuery()
             .FirstOrDefaultAsync(s => s.Id == id);
     }

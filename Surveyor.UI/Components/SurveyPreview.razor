@@ -2,7 +2,8 @@
 @namespace WebComponents
 @inject NavigationManager NavManager
 
-<h3 style="color: darkgray">@Item.Name</h3>
+<h3 style="color: darkgray; text-align: right">@Item.Name</h3>
+<Author Text="@Item.Author"/>
 <h5 style="font-weight: lighter">@Item.Description</h5>
 <MudDivider Light="true" Style="margin: 20px auto"/>
 <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => PassSurvey(Item.Id)">Пройти опрос</MudButton>
