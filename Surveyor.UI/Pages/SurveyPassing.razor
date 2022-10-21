@@ -8,7 +8,7 @@
 @if (_survey != null)
 {
     
-    <QAForm Survey="@_survey" OnSubmit="() => SubmitSurvey()"/>
+    <QAForm Survey="@_survey" OnSubmit="@SubmitSurvey"/>
 }
 
 @code {
@@ -22,8 +22,8 @@
         _survey = await Repo.GetByIdAsync(_targetSurvey);
     }
 
-    async Task SubmitSurvey()
+    async Task SubmitSurvey(Survey survey)
     {
-        
+        await Repo.SaveResultsAsync(survey);
     }
 }

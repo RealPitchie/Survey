@@ -29,8 +29,7 @@
                     Color="Color.Error"
                     Converter="@(new CustomStringToBoolConverter())">
                         @_currentAnswer.Value
-                </MudSwitch>
-                @* <MudSwitch @bind-Checked="@_currentAnswer.Value"></MudSwitch> *@
+                </MudSwitch> 
             }
             @if (_isAlerted)
             {
@@ -41,7 +40,7 @@
         }
         @if (string.IsNullOrEmpty(_question.Name))
         {
-            @foreach (var item in Survey.Result.Answers)
+            @foreach (var item in _newResult.Answers)
             {
                 <p>@item.Value</p>
             }
@@ -57,6 +56,7 @@
     [Parameter, EditorRequired]
     public EventCallback<Survey> OnSubmit { get; set; }
 
+    SurveyResult _newResult = new();
     int _index = 0;
     SurveyItem _question;
     Answer _currentAnswer = new();
@@ -82,7 +82,7 @@
             _isAlerted = true;
             return;
         }
-        Survey.Result.Answers.Add(_currentAnswer);
+        _newResult.Answers.Add(_currentAnswer);
         _currentAnswer = new Answer();
         _index++;
         _question = Survey.Items.Count > _index? Survey.Items[_index] : new SurveyItem();
@@ -90,8 +90,9 @@
     }
 
     async Task Submit()
-    {
-        await OnSubmit.InvokeAsync();
+    { 
+        Survey.Results.Add(_newResult);
+        await OnSubmit.InvokeAsync(Survey);
     }
     public class CustomStringToBoolConverter : BoolConverter<string>
     {

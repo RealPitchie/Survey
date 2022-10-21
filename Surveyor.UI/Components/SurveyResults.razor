@@ -1,0 +1,23 @@
+@namespace WebComponents
+
+@using Surveyor.Domain.Models
+
+<h3>SurveyResults</h3>
+
+<div>
+    @if (Survey != null)
+    {
+        for (var index = 0; index < Survey.Items.Count; index++)
+        {
+            <p>@Survey.Items[index].Name</p>
+            @foreach (var result in Survey.Results)
+            {
+                <p>@result.Answers[index].Value</p>
+            }
+        }
+    }
+</div>
+@code { 
+    [Parameter]
+    public Survey Survey { get; set; }
+}

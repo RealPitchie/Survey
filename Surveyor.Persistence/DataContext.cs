@@ -19,4 +19,5 @@ public class DataContext : DbContext
 
     }
     public DbSet<Survey> Surveys { get; set;  }
+    public DbSet<SurveyResult> Results { get; set; }
 }

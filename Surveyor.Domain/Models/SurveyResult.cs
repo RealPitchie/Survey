@@ -4,7 +4,7 @@ public class SurveyResult
 {
     public string Id { get; set; }
     public List<Answer> Answers { get; set; }
-    public DateTime PassedOn { get; set; }
+    public DateTime PassedOn { get; set; } 
 
     public SurveyResult()
     {

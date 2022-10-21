@@ -27,7 +27,7 @@
                 @if (!string.IsNullOrEmpty(_targetSurvey.Name))
                 {
                     <MudCard Elevation="3" Outlined="true" Style="padding: 10px; ">
-                        <SurveyPreview OnSubmit="PassSurvey" Item="@_targetSurvey" />
+                        <SurveyPreview IsSubmittable="true" OnSubmit="PassSurvey" Item="@_targetSurvey" />
                     </MudCard>
                 }
             </div>

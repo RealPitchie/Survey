@@ -9,5 +9,5 @@ public class Survey
     public string Description { get; set; }
     public DateTime CreatedAt { get; set; }
     public virtual List<SurveyItem> Items { get; set; }
-    public SurveyResult Result { get; set; } = new();
+    public List<SurveyResult> Results { get; set; } = new();
 }
